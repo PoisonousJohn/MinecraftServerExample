@@ -2,6 +2,7 @@
 import time
 import json
 import os
+import sys
 import urllib2
 import socket
 from time import sleep
@@ -28,7 +29,7 @@ def main():
                     status.players.online,
                     status.latency,
                     time.strftime("%d.%m.%Y %H:%M:%S")))
-                req = urllib2.request(report_url)
+                req = urllib2.Request(report_url)
                 data = {
                     'nodes' : [
                         {
@@ -41,8 +42,9 @@ def main():
                 response = urllib2.urlopen(req, json.dumps(data))
                 print('Reported server rooms: {0}'.format(response.info()))
                 sleep(5)
-        except:
-            print("Failed to connect to server. Retrying")
+        except Exception:
+            type, value, traceback = sys.exc_info()
+            print("Failed to connect to server {0}. Retrying".format(value))
             sleep(1)
 
 
